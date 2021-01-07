@@ -1,8 +1,8 @@
 
-set primary=pw77_810_EN.csv
-set xrefin=synxref77_702_718.csv
-set kmn="kmn77_810_EN.csv"
-set outfile=synxref77.810.csv
+set primary=pw7_8_1210_EN.csv
+set xrefin=synxref78_909_1206.csv
+set kmn="kmn7_8_1210_EN.csv"
+set outfile=synxref78_1210.csv
 
 pause besure %kmn% is sorted by unicode
 

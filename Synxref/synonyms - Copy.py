@@ -17,13 +17,8 @@ if len(sys.argv) > 1:
         count = 0
         for line in f:
             ln = line.split(",")
-            ref = ln[3].strip()
-            if len(ref) > 0:
-                ref = '('+ref+')'
-                
-            name = ln[1].strip()+' '+ref
+            name = ln[1].strip()
             uec = ln[2].strip()
-            #ref = '('+ln[3].strip()+')'
             #symbol,name,uec=line.split(",")
             if uec == prevuec:
                 count = count+1
@@ -33,7 +28,6 @@ if len(sys.argv) > 1:
                     fw.write('\n'+uec+', '+ name+' '+prevname)
             else:
                 count = 0
-                fw.write('\n'+uec+', '+ ref)
 
             prevuec = uec
             prevname = name
