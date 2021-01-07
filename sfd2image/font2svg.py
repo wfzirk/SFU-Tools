@@ -39,7 +39,7 @@ def export_glyphs(font_file_name):
             if glyph.unicode > 57343:
                 svg_file_name = 'svg/'+format(glyph.unicode, '04X')+'.svg'
                 sf = svg_file_name.lower()
-                glyph.export(sf)
+                glyph.export(sf, usetransform=True)
                 print(sf, glyph.glyphname, glyph.unicode)
             
             
