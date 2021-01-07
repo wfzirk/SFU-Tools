@@ -77,6 +77,10 @@ def basicSymbols(file, outfile):
 def madeFrom(nList, basicSym):
     # 'zuzites': ['\ueef7', 'Zuzites', 'eef7', 'Argument: mouth,said,speak,confession: wild: no,not: peace: sleep,rest,lie_down: love,compassion: people']
     mfList = []
+    bsList = {}
+    #for c in basicSym:
+    #    bsList[c.lower] = basicSym[c]
+        
     with open('madefrom.csv', mode='w') as mf:
         outStr = 'Font ,Word,Unicode,Made From unicode'
         mf.write(str(outStr)+'\n')
@@ -85,10 +89,12 @@ def madeFrom(nList, basicSym):
             #print('n',nList[n])
             xList = nList[n][3].replace(":",", ").replace('"',' ')  #.replace("  "," ")           # xref list
             
-            fnt = nList[n][0]
-            name = nList[n][1]            # original  key word keep case
-            ucode = nList[n][2]
-
+            fnt = nList[n][0].strip()
+            name = nList[n][1].strip()            # original  key word keep case
+            ucode = nList[n][2].strip()
+            if name in basicSym:
+                continue
+                
             mfRow = []
             mfRow.append(fnt)
             mfRow.append(name)
