@@ -9,7 +9,7 @@ def parse_command_line_options():
     parser.add_argument(
         'font_file_name',
         metavar='FONT',
-        help='font file name')
+        help='SFD file name')
     return parser.parse_args()
     
 def generate_file_name(glyph):
