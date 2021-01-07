@@ -92,8 +92,8 @@ def madeFrom(nList, basicSym):
             fnt = nList[n][0].strip()
             name = nList[n][1].strip()            # original  key word keep case
             ucode = nList[n][2].strip()
-            if name in basicSym:
-                continue
+            #if name in basicSym:
+            #    continue
                 
             mfRow = []
             mfRow.append(fnt)
