@@ -8,8 +8,8 @@ import os.path
 
 
 script = sys.argv[0]
-#logname = script.split('.')[0]
-#sys.stdout = open(logname+".log", "w",encoding="utf-8")
+logname = script.split('.')[0]
+sys.stdout = open(logname+".log", "w",encoding="utf-8")
 
 
 xsymbol = 0
@@ -20,26 +20,27 @@ xxref = 4
 
 def getXrefList(file, outfile):
     print('getXrefList',file)
-    fr = open(file, 'r', encoding='utf8')
-    reader = csv.reader(fr, delimiter=',', quotechar ='"')
-    fw = open(outfile, 'w')
+    with open(file, 'r', encoding='utf8') as fr:
+        reader = csv.reader(fr, delimiter=',', quotechar ='"')
+        #fw = open(outfile, 'w')
 
-    namList = {}
+        namList = {}
 
-    for row in reader:
-        if len(row) > 1:
-            ukey = row[3].strip()                  #key = unicode
-            nfont = row[0]                         # glyph
-            nkey = row[1].strip()                  #nkey = name
-            nxref = row[4].strip()                 #nvalue = unicode
-            namList[nkey.lower()] = [nfont, nkey, ukey, nxref]
+        for row in reader:
+            if len(row) > 1:
+                nfont = row[0]                         # glyph
+                nkey = row[1].strip()                  #nkey = name
+                nref = row[2].strip()                  # reference
+                ukey = row[3].strip()                  #key = unicode
+                nxref = row[4].strip()                 #nvalue = unicode
+                namList[nkey.lower()] = [nfont, nkey, ukey, nxref, nref]
 
-            wr = nfont+","+nkey+","+ukey+","+nxref
-            fw.write(wr+'\n')
-              
-    fr.close()    
-    fw.close()
-    #print('namList',namList)
+                #wr = nfont+","+nkey+","+ukey+","+nxref
+                #fw.write(wr+'\n')
+                  
+    #fr.close()    
+    #fw.close()
+    print('namList',namList)
     return namList
     
 def basicSymbols(file, outfile):
@@ -59,7 +60,7 @@ def basicSymbols(file, outfile):
             nxref = row[4].strip()                  #xref list
             if len(nxref) > 0:
                 continue
-            if '(' in rsym:
+            if len(rsym) > 0:
                 continue
             basicList[nkey.lower()] = ukey
 
@@ -74,15 +75,15 @@ def basicSymbols(file, outfile):
     return basicList    
 
     
-def madeFrom(nList, basicSym):
+def madeFrom(nList, basicSym, outfile='madefrom.csv'):
     # 'zuzites': ['\ueef7', 'Zuzites', 'eef7', 'Argument: mouth,said,speak,confession: wild: no,not: peace: sleep,rest,lie_down: love,compassion: people']
     mfList = []
     bsList = {}
     #for c in basicSym:
     #    bsList[c.lower] = basicSym[c]
         
-    with open('madefrom.csv', mode='w') as mf:
-        outStr = 'Font ,Word,Unicode,Made From unicode'
+    with open(outfile, mode='w') as mf:
+        outStr = 'Font,Word,Ref,Unicode'
         mf.write(str(outStr)+'\n')
         
         for n in nList:
@@ -92,12 +93,14 @@ def madeFrom(nList, basicSym):
             fnt = nList[n][0].strip()
             name = nList[n][1].strip()            # original  key word keep case
             ucode = nList[n][2].strip()
+            ref = nList[n][4].strip()
             #if name in basicSym:
             #    continue
                 
             mfRow = []
             mfRow.append(fnt)
             mfRow.append(name)
+            mfRow.append(ref)
             mfRow.append(ucode)
 
             ccs= xList.split(',')
@@ -111,9 +114,9 @@ def madeFrom(nList, basicSym):
                     #pList = pList+','+c
             print(len(uList), uList)
             if len(uList) > 0:
-                outStr = ' "'+fnt+'","'+name+'","'+ucode+'",'+uList[3:]+'"'.strip()
+                outStr = ' "'+fnt+'","'+name+'","'+ref+'","'+ucode+'",'+uList[3:]+'"'.strip()
             else:
-                outStr = ' "'+fnt+'","'+name+'","'+ucode+'"'.strip()
+                outStr = ' "'+fnt+'","'+name+'","'+ref+'","'+ucode+'"'.strip()
 
             print('outstr',outStr) 
             mf.write(outStr+'\n')
@@ -121,11 +124,12 @@ def madeFrom(nList, basicSym):
  
 if len(sys.argv) > 1: 
     xrefFile = sys.argv[1]
+    outfile = sys.argv[2]
     basicSym = basicSymbols(xrefFile, "basicsymbols.csv")
     nl = getXrefList(xrefFile, "xref.csv")
     #print(nl)
     #print(basicSym["man"])
-    madeFrom(nl, basicSym)
+    madeFrom(nl, basicSym, outfile)
     
 else:
     print("\nsyntax: fontforge -script xref.py")
