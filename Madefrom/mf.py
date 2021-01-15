@@ -1,3 +1,8 @@
+#
+#    mf.py - generates a unicode list based off the xref***.csv file 
+#            converting the xref words to unicode 
+#            Also generates a list of basic symbols
+#
 # rem print("\nsyntax: fontforge -script mf.py xrefin.csv   outfile.csv")
 # rem print("   converts xref words to hex unicode string")
 #import fontforge
