@@ -1,4 +1,5 @@
-
+# rem print("\nsyntax: fontforge -script mf.py xrefin.csv   outfile.csv")
+# rem print("   converts xref words to hex unicode string")
 #import fontforge
 import sys
 import csv
@@ -82,9 +83,10 @@ def madeFrom(nList, basicSym, outfile='madefrom.csv'):
     #for c in basicSym:
     #    bsList[c.lower] = basicSym[c]
         
-    with open(outfile, mode='w') as mf:
-        outStr = 'Font,Word,Ref,Unicode'
-        mf.write(str(outStr)+'\n')
+    with open(outfile, mode='w',encoding='utf8', newline='') as mf:
+        csvWriter = csv.writer(mf)
+        #outStr = 'Font,Word,Ref,Unicode'
+        #mf.write(str(outStr)+'\n')
         
         for n in nList:
             #print('n',nList[n])
@@ -112,15 +114,23 @@ def madeFrom(nList, basicSym, outfile='madefrom.csv'):
                     mfRow.append(basicSym[c.lower()])
                     uList = uList+'", "'+basicSym[c.lower()]
                     #pList = pList+','+c
-            print(len(uList), uList)
-            if len(uList) > 0:
+            #print(len(uList), uList)
+            '''if len(uList) > 0:
                 outStr = ' "'+fnt+'","'+name+'","'+ref+'","'+ucode+'",'+uList[3:]+'"'.strip()
             else:
                 outStr = ' "'+fnt+'","'+name+'","'+ref+'","'+ucode+'"'.strip()
+             
+            if len(uList) > 0:
+                outStr = fnt+','+name+','+ref+','+ucode+','+uList[3:].strip()
+            else:
+                outStr = fnt+','+name+','+ref+','+ucode.strip()
 
             print('outstr',outStr) 
             mf.write(outStr+'\n')
- 
+            #mf.write('\n')
+            '''
+            print(mfRow)
+            csvWriter.writerow(mfRow)
  
 if len(sys.argv) > 1: 
     xrefFile = sys.argv[1]
@@ -132,8 +142,8 @@ if len(sys.argv) > 1:
     madeFrom(nl, basicSym, outfile)
     
 else:
-    print("\nsyntax: fontforge -script xref.py")
-    print("  creates xref.csv from  existing xref dictionary")
+    print("\nsyntax: fontforge -script mf.py xrefin.csv   outfile.csv")
+    print("   converts xref words to hex unicode string")
     sys.exit()
 
 print('Done')
